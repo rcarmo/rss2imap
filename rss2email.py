@@ -200,6 +200,7 @@ def send(sender, recipient, subject, body, contenttype, datetime, extraheaders=N
                 sys.exit(1)
         if not folder:
             folder = 'INBOX'
+        mailserver.debug = 4
         try:
             mailserver.select(folder)
         except:
