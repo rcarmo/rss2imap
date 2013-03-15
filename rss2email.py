@@ -6,7 +6,7 @@ Usage:
   new [emailaddress] (create new feedfile)
   email newemailaddress (update default email)
   run [--no-send] [num]
-  add feedurl [emailaddress]
+  add feedurl [emailaddress] [folder]
   list
   reset
   delete n
@@ -171,10 +171,6 @@ def send(sender, recipient, subject, body, contenttype, extraheaders=None, smtps
 	msg['From'] = fromhdr
 
 	msg_as_string = msg.as_string()
-#DEPRECATED 	if QP_REQUIRED:
-#DEPRECATED 		ins, outs = SIO(msg_as_string), SIO()
-#DEPRECATED 		mimify.mimify(ins, outs)
-#DEPRECATED 		msg_as_string = outs.getvalue()
 
 	if SMTP_SEND:
 		if not smtpserver: 
@@ -289,12 +285,8 @@ import socket; socket_errors = []
 for e in ['error', 'gaierror']:
 	if hasattr(socket, e): socket_errors.append(getattr(socket, e))
 
-#DEPRECATED import mimify 
-#DEPRECATED from StringIO import StringIO as SIO 
-#DEPRECATED mimify.CHARSET = 'utf-8'
-
 import feedparser
-feedparser.USER_AGENT = "rss2email/"+__version__+ " +http://www.allthingsrss.com/rss2email/"
+feedparser.USER_AGENT = "rss2email/"+__version__+ " +https://github.com/rcarmo/rss2email"
 
 import html2text as h2t
 
