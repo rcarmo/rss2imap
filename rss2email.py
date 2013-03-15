@@ -116,7 +116,7 @@ from email.Utils import parseaddr, formataddr
 			 
 # Note: You can also override the send function.
 
-def send(sender, recipient, subject, body, contenttype, extraheaders=None, smtpserver=None):
+def send(sender, recipient, subject, body, contenttype, extraheaders=None, mailserver=None):
 	"""Send an email.
 	
 	All arguments should be Unicode strings (plain ASCII works as well).
@@ -172,16 +172,44 @@ def send(sender, recipient, subject, body, contenttype, extraheaders=None, smtps
 
 	msg_as_string = msg.as_string()
 
-	if SMTP_SEND:
-		if not smtpserver: 
+    if IMAP_SEND:
+        if not mailserver:
+            import imaplib, socket
+            try:
+                (host,port) = IMAP_SERVER.split(':',1)
+            except ValueError:
+                host = IMAP_SERVER
+                port = 993 if IMAP_SSL else 143
+            try:
+                if IMAP_SSL:
+                    mailserver = imaplib.IMAP4_SSL(host, port)
+                else:
+                    mailserver = imaplib.IMAP4(host, port)
+                # speed up interactions on TCP connections using small packets
+                mailserver.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+                mailserver.login(IMAP_USER, IMAP_PASS)
+			except KeyboardInterrupt:
+				raise
+			except Exception, e:
+				print >>warn, ""
+				print >>warn, ('Fatal error: could not connect to mail server "%s"' % IMAP_SERVER)
+				print >>warn, ('Check your config.py file to confirm that IMAP_SERVER and other mail server settings are configured properly')
+				if hasattr(e, 'reason'):
+					print >>warn, "Reason:", e.reason
+				sys.exit(1)
+        mailserver.append('INBOX','',imaplib.Time2Internaldate(time.time(), msg_as_string))
+        return mailserver
+
+	elif SMTP_SEND:
+		if not mailserver: 
 			import smtplib
 			
 			try:
 				if SMTP_SSL:
-					smtpserver = smtplib.SMTP_SSL()
+					mailserver = smtplib.SMTP_SSL()
 				else:
-					smtpserver = smtplib.SMTP()
-				smtpserver.connect(SMTP_SERVER)
+					mailserver = smtplib.SMTP()
+				mailserver.connect(SMTP_SERVER)
 			except KeyboardInterrupt:
 				raise
 			except Exception, e:
@@ -194,10 +222,10 @@ def send(sender, recipient, subject, body, contenttype, extraheaders=None, smtps
 					
 			if AUTHREQUIRED:
 				try:
-					smtpserver.ehlo()
+					mailserver.ehlo()
 					if not SMTP_SSL: smtpserver.starttls()
-					smtpserver.ehlo()
-					smtpserver.login(SMTP_USER, SMTP_PASS)
+					mailserver.ehlo()
+					mailserver.login(SMTP_USER, SMTP_PASS)
 				except KeyboardInterrupt:
 					raise
 				except Exception, e:
@@ -208,8 +236,8 @@ def send(sender, recipient, subject, body, contenttype, extraheaders=None, smtps
 						print >>warn, "Reason:", e.reason
 					sys.exit(1)
 					
-		smtpserver.sendmail(sender, recipient, msg_as_string)
-		return smtpserver
+		mailserver.sendmail(sender, recipient, msg_as_string)
+		return mailserver
 
 	else:
 		try:
