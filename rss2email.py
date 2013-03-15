@@ -569,7 +569,7 @@ class AnchorParser(HTMLParser):
         if tag == 'a':
             attrs = dict(attrs)
             if 'href' in attrs:
-                hrefs.append(attrs['href'])
+                self.hrefs.append(attrs['href'])
 
 def run(num=None):
     feeds, feedfileObject = load()
