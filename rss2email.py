@@ -197,7 +197,7 @@ def send(sender, recipient, subject, body, contenttype, extraheaders=None, mails
                 if hasattr(e, 'reason'):
                     print >>warn, "Reason:", e.reason
                 sys.exit(1)
-        mailserver.append('INBOX','',imaplib.Time2Internaldate(time.time()), msg_as_string)
+        mailserver.append('INBOX','',msg['Date'], msg_as_string)
         return mailserver
 
     elif SMTP_SEND:
