@@ -113,6 +113,7 @@ CHARSET_LIST='US-ASCII', 'BIG5', 'ISO-2022-JP', 'ISO-8859-1', 'UTF-8'
 from email.MIMEText import MIMEText
 from email.Header import Header
 from email.Utils import parseaddr, formataddr
+import imaplib, socket
              
 # Note: You can also override the send function.
 
@@ -173,7 +174,6 @@ def send(sender, recipient, subject, body, contenttype, extraheaders=None, mails
     msg_as_string = msg.as_string()
 
     if IMAP_SEND:
-        import imaplib, socket
         if not mailserver:
             try:
                 (host,port) = IMAP_SERVER.split(':',1)
