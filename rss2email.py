@@ -198,7 +198,14 @@ def send(sender, recipient, subject, body, contenttype, datetime, extraheaders=N
                 if hasattr(e, 'reason'):
                     print >>warn, "Reason:", e.reason
                 sys.exit(1)
-        mailserver.append('INBOX','',imaplib.Time2Internaldate(datetime), msg_as_string)
+        if not folder:
+            folder = 'INBOX'
+        try:
+            mailserver.select(folder)
+        except:
+            print "%s does not exist, creating" % folder
+            mailserver.create(folder)
+        mailserver.append(folder,'',imaplib.Time2Internaldate(datetime), msg_as_string)
         return mailserver
 
     elif SMTP_SEND:
