@@ -173,8 +173,8 @@ def send(sender, recipient, subject, body, contenttype, extraheaders=None, mails
     msg_as_string = msg.as_string()
 
     if IMAP_SEND:
+        import imaplib, socket
         if not mailserver:
-            import imaplib, socket
             try:
                 (host,port) = IMAP_SERVER.split(':',1)
             except ValueError:
