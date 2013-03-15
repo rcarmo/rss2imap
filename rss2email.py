@@ -117,7 +117,7 @@ import imaplib, socket
              
 # Note: You can also override the send function.
 
-def send(sender, recipient, subject, body, contenttype, extraheaders=None, mailserver=None):
+def send(sender, recipient, subject, body, contenttype, datetime, extraheaders=None, mailserver=None):
     """Send an email.
     
     All arguments should be Unicode strings (plain ASCII works as well).
@@ -197,7 +197,7 @@ def send(sender, recipient, subject, body, contenttype, extraheaders=None, mails
                 if hasattr(e, 'reason'):
                     print >>warn, "Reason:", e.reason
                 sys.exit(1)
-        mailserver.append('INBOX','',msg['Date'], msg_as_string)
+        mailserver.append('INBOX','',imaplib.Time2Internaldate(datetime), msg_as_string)
         return mailserver
 
     elif SMTP_SEND:
@@ -790,7 +790,7 @@ def run(num=None):
                                     if ('rel' in extralink) and extralink['rel'] == u'via':
                                         content += '<a href="'+extralink['href']+'">Via: '+extralink['title']+'</a>\n'
 
-                    mailserver = send(fromhdr, tohdr, subjecthdr, content, contenttype, extraheaders, mailserver)
+                    mailserver = send(fromhdr, tohdr, subjecthdr, content, contenttype, datetime, extraheaders, mailserver)
             
                     f.seen[frameid] = id
                     
