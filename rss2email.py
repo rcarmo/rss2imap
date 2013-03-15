@@ -223,7 +223,7 @@ def send(sender, recipient, subject, body, contenttype, extraheaders=None, mails
             if AUTHREQUIRED:
                 try:
                     mailserver.ehlo()
-                    if not SMTP_SSL: smtpserver.starttls()
+                    if not SMTP_SSL: mailserver.starttls()
                     mailserver.ehlo()
                     mailserver.login(SMTP_USER, SMTP_PASS)
                 except KeyboardInterrupt:
@@ -562,7 +562,7 @@ def add(*args):
 
 def run(num=None):
     feeds, feedfileObject = load()
-    smtpserver = None
+    mailserver = None
     try:
         # We store the default to address as the first item in the feeds list.
         # Here we take it out and save it for later.
@@ -791,7 +791,7 @@ def run(num=None):
                                     if ('rel' in extralink) and extralink['rel'] == u'via':
                                         content += '<a href="'+extralink['href']+'">Via: '+extralink['title']+'</a>\n'
 
-                    smtpserver = send(fromhdr, tohdr, subjecthdr, content, contenttype, extraheaders, smtpserver)
+                    mailserver = send(fromhdr, tohdr, subjecthdr, content, contenttype, extraheaders, mailserver)
             
                     f.seen[frameid] = id
                     
@@ -813,8 +813,11 @@ def run(num=None):
 
     finally:        
         unlock(feeds, feedfileObject)
-        if smtpserver:
-            smtpserver.quit()
+        if mailserver:
+            try:
+                mailserver.quit()
+            except:
+                mailserver.logout()
 
 def list():
     feeds, feedfileObject = load(lock=0)
