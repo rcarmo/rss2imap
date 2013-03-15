@@ -742,7 +742,7 @@ def run(num=None):
                         else:
                             body = entrycontent.strip()
                         if body != '':  
-                            content += '<div id="body"><table><tr><td>\n' + body + '</td></tr></table></div>\n'
+                            content += '<div id="body">\n' + body + '</div>\n'
                         content += '\n<p class="footer">URL: <a href="'+link+'">'+link+'</a>'
                         if hasattr(entry,'enclosures'):
                             for enclosure in entry.enclosures:
