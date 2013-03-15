@@ -38,7 +38,7 @@ VERBOSE = 0
 
 # 1: Use the publisher's email if you can't find the author's.
 # 0: Just use the DEFAULT_FROM email instead.
-USE_PUBLISHER_EMAIL = 0
+USE_PUBLISHER_EMAIL = 1
 
 # 1: Use SMTP_SERVER to send mail.
 # 0: Call /usr/sbin/sendmail to send mail.
@@ -53,6 +53,13 @@ SMTP_PASS = 'password'  # for SMTP AUTH, set SMTP password here
 
 SMTP_SSL = 0
 
+# 1: Use IMAP_SERVER to deliver mail and ignore SMTP settings.
+# 0: Use SMTP
+
+IMAP_SEND = 1
+IMAP_SERVER = "smtp.yourisp.net:143"
+IMAP_USER = 'username'  # for SMTP AUTH, set SMTP username here
+IMAP_PASS = 'password'  # for SMTP AUTH, set SMTP password here
 
 
 # Set this to add a bonus header to all emails (start with '\n').
@@ -63,28 +70,19 @@ BONUS_HEADER = ''
 OVERRIDE_FROM = {}
 
 # Set this to override From email addresses. Keys are feed URLs, values are new emails.
-
 OVERRIDE_EMAIL = {}
-
-
-
-# Set this to default From email addresses. Keys are feed URLs, values are new email addresses.
 
 DEFAULT_EMAIL = {}
 
-
 # Only use the email from address rather than friendly name plus email address
-
 NO_FRIENDLY_NAME = 0
-
-
 
 # Set this to override the timeout (in seconds) for feed server response
 FEED_TIMEOUT = 60
 
 # Optional CSS styling
 USE_CSS_STYLING = 1
-STYLE_SHEET='h1 {font: 18pt Georgia, "Times New Roman";} body {font: 12pt Arial;} a:link {font: 12pt Arial; font-weight: bold; color: #0000cc} blockquote {font-family: monospace; }  .header { background: #e0ecff; border-bottom: solid 4px #c3d9ff; padding: 5px; margin-top: 0px; color: red;} .header a { font-size: 20px; text-decoration: none; } .footer { background: #c3d9ff; border-top: solid 4px #c3d9ff; padding: 5px; margin-bottom: 0px; } #entry {border: solid 4px #c3d9ff; } #body { margin-left: 5px; margin-right: 5px; }'
+STYLE_SHEET='img {max-width: 100% !important; height: auto;} body {font: 12pt Arial;} a:link {color: #0000cc} .header {display: none;}'
 
 # If you have an HTTP Proxy set this in the format 'http://your.proxy.here:8080/'
 PROXY=""
