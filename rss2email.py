@@ -727,7 +727,7 @@ def run(num=None):
                         if taglist:
                             tagline = ",".join(taglist)
                     
-                    extraheaders = {'Date': datehdr, 'User-Agent': useragenthdr, 'X-RSS-Feed': f.url, 'Message-ID': id, 'X-RSS-ID': id, 'X-RSS-URL': link, 'X-RSS-TAGS' : tagline}
+                    extraheaders = {'Date': datehdr, 'User-Agent': useragenthdr, 'X-RSS-Feed': f.url, 'Message-ID': '<%s>' % id, 'X-RSS-ID': id, 'X-RSS-URL': link, 'X-RSS-TAGS' : tagline}
                     if BONUS_HEADER != '':
                         for hdr in BONUS_HEADER.strip().splitlines():
                             pos = hdr.strip().find(':')
