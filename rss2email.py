@@ -15,12 +15,13 @@ Usage:
   opmlexport
   opmlimport filename
 """
-__version__ = "2.70"
+__version__ = "2.71-rcarmo"
 __author__ = "Lindsey Smith (lindsey@allthingsrss.com)"
 __copyright__ = "(C) 2004 Aaron Swartz. GNU GPL 2 or 3."
 ___contributors__ = ["Dean Jackson", "Brian Lalor", "Joey Hess", 
                      "Matej Cepl", "Martin 'Joey' Schulze", 
                      "Marcel Ackermann (http://www.DreamFlasher.de)", 
+                     "Rui Carmo (http://the.taoofmac.com)",
                      "Lindsey Smith (maintainer)", "Erik Hetzner", "Aaron Swartz (original author)" ]
 
 import urllib2
@@ -117,7 +118,7 @@ import imaplib, socket
              
 # Note: You can also override the send function.
 
-def send(sender, recipient, subject, body, contenttype, datetime, extraheaders=None, mailserver=None):
+def send(sender, recipient, subject, body, contenttype, datetime, extraheaders=None, mailserver=None, folder=None):
     """Send an email.
     
     All arguments should be Unicode strings (plain ASCII works as well).
@@ -489,10 +490,11 @@ def getEmail(r, entry):
 ### Simple Database of Feeds ###
 
 class Feed:
-    def __init__(self, url, to):
+    def __init__(self, url, to, folder=None):
         self.url, self.etag, self.modified, self.seen = url, None, None, {}
         self.active = True
-        self.to = to        
+        self.to = to
+        self.folder = folder
 
 def load(lock=1):
     if not os.path.exists(feedfile):
@@ -549,15 +551,18 @@ def parse(url, etag, modified):
 def add(*args):
     if len(args) == 2 and contains(args[1], '@') and not contains(args[1], '://'):
         urls, to = [args[0]], args[1]
+        folder = None
+    elif len(args) == 2:
+        urls, folder = [args[0]], args[1]
     else:
-        urls, to = args, None
+        urls, to, folder = args, None, None
     
     feeds, feedfileObject = load()
     if (feeds and not isstr(feeds[0]) and to is None) or (not len(feeds) and to is None):
         print "No email address has been defined. Please run 'r2e email emailaddress' or"
         print "'r2e add url emailaddress'."
         sys.exit(1)
-    for url in urls: feeds.append(Feed(url, to))
+    for url in urls: feeds.append(Feed(url, to, folder))
     unlock(feeds, feedfileObject)
 
 ### HTML Parser for grabbing links ###
@@ -804,7 +809,7 @@ def run(num=None):
                                     if ('rel' in extralink) and extralink['rel'] == u'via':
                                         content += '<a href="'+extralink['href']+'">Via: '+extralink['title']+'</a>\n'
 
-                    mailserver = send(fromhdr, tohdr, subjecthdr, content, contenttype, datetime, extraheaders, mailserver)
+                    mailserver = send(fromhdr, tohdr, subjecthdr, content, contenttype, datetime, extraheaders, mailserver, f.folder)
             
                     f.seen[frameid] = id
                     
@@ -842,7 +847,7 @@ def list():
     else: ifeeds = feeds; i = 0
     for f in ifeeds:
         active = ('[ ]', '[*]')[f.active]
-        print `i`+':',active, f.url, '('+(f.to or ('default: '+default_to))+')'
+        print `i`+':',active, f.url, '('+(f.to or ('default: '+default_to))+')' + f.folder
         if not (f.to or default_to):
             print "   W: Please define a default address with 'r2e email emailaddress'"
         i+= 1
@@ -940,7 +945,7 @@ if __name__ == '__main__':
         
         if action == "run": 
             if args and args[0] == "--no-send":
-                def send(sender, recipient, subject, body, contenttype, extraheaders=None, smtpserver=None):
+                def send(sender, recipient, subject, body, contenttype, extraheaders=None, mailserver=None):
                     if VERBOSE: print 'Not sending:', unu(subject)
 
             if args and args[-1].isdigit(): run(int(args[-1]))
