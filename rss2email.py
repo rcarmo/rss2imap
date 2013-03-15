@@ -731,7 +731,7 @@ def run(num=None):
                     if USE_CSS_STYLING and HTML_MAIL:
                         contenttype = 'html'
                         content = "<html>\n" 
-                        content += '<head><style><!--' + STYLE_SHEET + '//--></style></head>\n'
+                        content += '<head><style>' + STYLE_SHEET + '</style></head>\n'
                         content += '<body>\n'
                         content += '<div id="entry">\n'
                         content += '<h1'
