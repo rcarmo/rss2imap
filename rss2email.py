@@ -560,6 +560,17 @@ def add(*args):
     for url in urls: feeds.append(Feed(url, to))
     unlock(feeds, feedfileObject)
 
+### HTML Parser for grabbing links ###
+
+from HTMLParser import HTMLParser
+class AnchorParser(HTMLParser):
+    hrefs = []
+    def handle_starttag(self, tag, attrs):
+        if tag == 'a':
+            attrs = dict(attrs)
+            if 'href' in attrs:
+                hrefs.append(attrs['href'])
+
 def run(num=None):
     feeds, feedfileObject = load()
     mailserver = None
@@ -740,6 +751,9 @@ def run(num=None):
                             body = entrycontent[1].strip()
                         else:
                             body = entrycontent.strip()
+                        parser = AnchorParser()
+                        parser.feed(body)
+                        extraheaders['References'] = ' '.join(['<%s>' % h for h in parser.hrefs])
                         if body != '':  
                             content += '<div id="body">\n' + body + '</div>\n'
                         content += '\n<p class="footer">URL: <a href="'+link+'">'+link+'</a>'
