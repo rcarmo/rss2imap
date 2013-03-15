@@ -58,8 +58,10 @@ SMTP_SSL = 0
 
 IMAP_SEND = 1
 IMAP_SERVER = "smtp.yourisp.net:143"
-IMAP_USER = 'username'  # for SMTP AUTH, set SMTP username here
-IMAP_PASS = 'password'  # for SMTP AUTH, set SMTP password here
+IMAP_USER = 'username'  # set IMAP username here
+IMAP_PASS = 'password'  # set IMAP password here
+
+IMAP_SSL = 1
 
 
 # Set this to add a bonus header to all emails (start with '\n').
