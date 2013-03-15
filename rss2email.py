@@ -560,7 +560,7 @@ def add(*args):
         urls, to = [args[0]], args[1]
         folder = None
     elif len(args) == 2:
-        urls, folder = [args[0]], args[1]
+        urls, to, folder = [args[0]], None, args[1]
     else:
         urls, to, folder = args, None, None
     
