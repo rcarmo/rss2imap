@@ -28,5 +28,6 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 # Next Steps:
 
 * Automatic message categorization using Bayesian filtering and NLTK
+* Automatic expunging of read items after a specified period (unless they're flagged/starred)
 * Better reference tracking to identify 'hot' items
 * Figure out a nice way to do favicons (X-Face is obsolete, and so is X-Image-URL)
