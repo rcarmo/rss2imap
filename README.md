@@ -3,6 +3,12 @@ rss2imap
 
 An adaptation of rss2email that uses IMAP directly.
 
+# What does it look like?
+
+Well, with the shipping CSS in `config.py`, it looks like this:
+
+<img src="https://raw.github.com/rcarmo/rss2email/screenshots/mail.app.1.jpg" style="max-width: 100%; height: auto;">
+
 # Main Features:
 
 * E-mail is injected directly via IMAP (so no delays or hassles with spam filters)
