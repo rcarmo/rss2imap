@@ -114,7 +114,7 @@ CHARSET_LIST='US-ASCII', 'BIG5', 'ISO-2022-JP', 'ISO-8859-1', 'UTF-8'
 from email.MIMEText import MIMEText
 from email.Header import Header
 from email.Utils import parseaddr, formataddr
-import imaplib, socket
+import imaplib, socket, hashlib
              
 # Note: You can also override the send function.
 
@@ -738,7 +738,7 @@ def run(num=None):
                         if taglist:
                             tagline = ",".join(taglist)
                     
-                    extraheaders = {'Date': datehdr, 'User-Agent': useragenthdr, 'X-RSS-Feed': f.url, 'Message-ID': '<%s>' % id, 'X-RSS-ID': id, 'X-RSS-URL': link, 'X-RSS-TAGS' : tagline}
+                    extraheaders = {'Date': datehdr, 'User-Agent': useragenthdr, 'X-RSS-Feed': f.url, 'Message-ID': '<%s@rss2imap>' % hashlib.sha1(id).hexdigest(), 'X-RSS-ID': id, 'X-RSS-URL': link, 'X-RSS-TAGS' : tagline}
                     if BONUS_HEADER != '':
                         for hdr in BONUS_HEADER.strip().splitlines():
                             pos = hdr.strip().find(':')
@@ -764,7 +764,7 @@ def run(num=None):
                             body = entrycontent.strip()
                         parser = AnchorParser()
                         parser.feed(body)
-                        extraheaders['References'] = ' '.join(['<%s>' % h for h in parser.hrefs])
+                        extraheaders['References'] = ' '.join(['<%s@rss2imap>' % hashlib.sha1(h).hexdigest() for h in parser.hrefs])
                         if body != '':  
                             content += '<div id="body">\n' + body + '</div>\n'
                         content += '\n<p class="footer">URL: <a href="'+link+'">'+link+'</a>'

@@ -61,8 +61,11 @@ IMAP_SERVER = "smtp.yourisp.net:143"
 IMAP_USER = 'username'  # set IMAP username here
 IMAP_PASS = 'password'  # set IMAP password here
 
+# Connect to the IMAP server using SSL
 IMAP_SSL = 1
 
+# Synthesise From: addresses based on feed name and domain
+IMAP_MUNGE_FROM = 1
 
 # Set this to add a bonus header to all emails (start with '\n').
 BONUS_HEADER = ''
