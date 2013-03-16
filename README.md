@@ -13,7 +13,7 @@ Well, with the shipping CSS in `config.py`, it looks like this:
 
 Well, it works fine with the Gmail app on both Android and iOS, as well as the native IMAP clients:
 
-<img src="https://raw.github.com/rcarmo/rss2email/screenshots/gmail.ios.1.jpg" style="max-width: 25%; height: auto;"> <img src="https://raw.github.com/rcarmo/rss2email/screenshots/mail.ios.1.jpg" style="max-width: 25%; height: auto;"> <img src="https://raw.github.com/rcarmo/rss2email/screenshots/gmail.android.1.jpg" style="max-width: 25%; height: auto;"> <img src="https://raw.github.com/rcarmo/rss2email/screenshots/mail.android.1.jpg" style="max-width: 25%; height: auto;">
+<img src="https://raw.github.com/rcarmo/rss2email/screenshots/gmail.ios.1.jpg" width="25%"> <img src="https://raw.github.com/rcarmo/rss2email/screenshots/mail.ios.1.jpg" width="25%"> <img src="https://raw.github.com/rcarmo/rss2email/screenshots/gmail.android.1.jpg" width="25%"> <img src="https://raw.github.com/rcarmo/rss2email/screenshots/mail.android.1.jpg" width="25%">
 
 As long as you sync, all the text will be available off-line (images are cached at the whim of the MUA).
 
