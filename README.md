@@ -17,6 +17,8 @@ Well, it works fine with the Gmail app on both Android and iOS, as well as the n
 
 As long as you sync, all the text will be available off-line (images are cached at the whim of the MUA).
 
+The Gmail app ignores CSS and may have weird behaviors with long bits of text, though.
+
 # Main Features:
 
 * E-mail is injected directly via IMAP (so no delays or hassles with spam filters)
