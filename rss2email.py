@@ -576,8 +576,8 @@ def add(*args):
     if len(args) == 2 and contains(args[1], '@') and not contains(args[1], '://'):
         urls, to = [args[0]], args[1]
         folder = None
-    elif len(args) == 2:
-        urls, to, folder = [args[0]], None, args[1]
+    elif len(args) >= 2:
+        urls, to, folder = [args[0]], None, ' '.join(args[1:])
     else:
         urls, to, folder = args, None, None
     
