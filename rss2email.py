@@ -785,7 +785,7 @@ def run(num=None):
                             body = entrycontent.strip()
                         parser = AnchorParser()
                         parser.feed(body)
-                        extraheaders['References'] = ' '.join(['<%s@rss2email>' % hashlib.sha1(h).hexdigest() for h in parser.hrefs])
+                        extraheaders['References'] = ' '.join(['<%s@rss2email>' % hashlib.sha1(h.encode('utf-8')).hexdigest() for h in parser.hrefs])
                         if body != '':  
                             content += '<div id="body">\n' + body + '</div>\n'
                         content += '\n<p class="footer">URL: <a href="'+link+'">'+link+'</a>'
