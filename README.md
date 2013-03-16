@@ -31,3 +31,6 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 * Automatic expunging of read items after a specified period (unless they're flagged/starred)
 * Better reference tracking to identify 'hot' items
 * Figure out a nice way to do favicons (X-Face is obsolete, and so is X-Image-URL)
+* Refactor this as a multi-threaded app with a SQLite feed store
+
+Be aware that this works and is easy to hack, but uses old Python idioms and could do with some refactoring (PEP-8 zealots are sure to cringe as they read through the code).
