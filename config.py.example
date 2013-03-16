@@ -66,6 +66,7 @@ IMAP_SSL = 1
 
 # Synthesise From: addresses based on feed name and domain
 IMAP_MUNGE_FROM = 1
+IMAP_OVERRIDE_TO = 'Me <me@localhost>'
 
 # Set this to add a bonus header to all emails (start with '\n').
 BONUS_HEADER = ''

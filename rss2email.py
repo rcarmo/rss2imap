@@ -161,7 +161,10 @@ def send(sender, recipient, subject, body, contenttype, datetime, extraheaders=N
     
     # Create the message ('plain' stands for Content-Type: text/plain)
     msg = MIMEText(body.encode(body_charset), contenttype, body_charset)
-    msg['To'] = formataddr((recipient_name, recipient_addr))
+    if IMAP_OVERRIDE_TO:
+        msg['To'] = IMAP_OVERRIDE_TO
+    else:
+        msg['To'] = formataddr((recipient_name, recipient_addr))
     msg['Subject'] = Header(unicode(subject), header_charset)
     for hdr in extraheaders.keys():
         try:
