@@ -473,7 +473,7 @@ def getMungedFrom(r):
     name = feed.get('title', 'unknown').lower()
     pattern = re.compile('[\W_]+',re.UNICODE)
     re.sub(pattern, '', name)
-    name = "%s <%s@%s>" % (feed.get('title','Unnamed Feed'), name, '.'.join(urlparse.urlparse(r.url).netloc))
+    name = "%s <%s@%s>" % (feed.get('title','Unnamed Feed'), name.replace(' ','_'), urlparse.urlparse(r.url).netloc)
     return name
 
 
@@ -756,7 +756,7 @@ def run(num=None):
                         if taglist:
                             tagline = ",".join(taglist)
                     
-                    extraheaders = {'Date': datehdr, 'User-Agent': useragenthdr, 'X-RSS-Feed': f.url, 'Message-ID': '<%s@rss2email>' % hashlib.sha1(id).hexdigest(), 'X-RSS-ID': id, 'X-RSS-URL': link, 'X-RSS-TAGS' : tagline, 'X-RSS-NAME' : r.feed.name, 'X-MUNGED-FROM': getMungedFrom(r)}
+                    extraheaders = {'Date': datehdr, 'User-Agent': useragenthdr, 'X-RSS-Feed': f.url, 'Message-ID': '<%s@rss2email>' % hashlib.sha1(id).hexdigest(), 'X-RSS-ID': id, 'X-RSS-URL': link, 'X-RSS-TAGS' : tagline, 'X-MUNGED-FROM': getMungedFrom(r)}
                     if BONUS_HEADER != '':
                         for hdr in BONUS_HEADER.strip().splitlines():
                             pos = hdr.strip().find(':')
