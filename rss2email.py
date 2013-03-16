@@ -596,7 +596,9 @@ def add(*args):
 
 from HTMLParser import HTMLParser
 class AnchorParser(HTMLParser):
-    hrefs = []
+    def __init__(self):
+        self.hrefs = []
+
     def handle_starttag(self, tag, attrs):
         if tag == 'a':
             attrs = dict(attrs)
