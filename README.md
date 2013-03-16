@@ -13,7 +13,7 @@ Well, with the shipping CSS in `config.py`, it looks like this:
 
 * E-mail is injected directly via IMAP (so no delays or hassles with spam filters)
 * Feeds can be grouped into folders -- no inbox clutter!
-* Generates E-mail headers for threading (so a post that references another will show up as a thread on decent MUAs)
+* Generates E-mail headers for threading (so a post that references another will show up as a thread on decent MUAs, and posts from the same feed will be part of the same thread)
 
 # Next Steps:
 
