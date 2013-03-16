@@ -597,6 +597,7 @@ def add(*args):
 from HTMLParser import HTMLParser
 class AnchorParser(HTMLParser):
     def __init__(self):
+        super(AnchorParser, self).__init__()
         self.hrefs = []
 
     def handle_starttag(self, tag, attrs):
