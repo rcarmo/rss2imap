@@ -473,7 +473,7 @@ def getMungedFrom(r):
     name = feed.get('title', 'unknown').lower()
     pattern = re.compile('[\W_]+',re.UNICODE)
     re.sub(pattern, '', name)
-    name = "%s <%s@%s>" % (feed.get('title','Unnamed Feed'), name, '.'.join(urlparse.urlparse(r.url).netloc)
+    name = "%s <%s@%s>" % (feed.get('title','Unnamed Feed'), name, '.'.join(urlparse.urlparse(r.url).netloc))
     return name
 
 
