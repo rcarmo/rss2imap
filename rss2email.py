@@ -1,4 +1,4 @@
- #!/usr/bin/python
+#!/usr/bin/python
 """rss2email: get RSS feeds emailed to you
 http://rss2email.infogami.com
 
@@ -22,9 +22,10 @@ ___contributors__ = ["Dean Jackson", "Brian Lalor", "Joey Hess",
                      "Matej Cepl", "Martin 'Joey' Schulze", 
                      "Marcel Ackermann (http://www.DreamFlasher.de)", 
                      "Rui Carmo (http://the.taoofmac.com)",
-                     "Lindsey Smith (maintainer)", "Erik Hetzner", "Aaron Swartz (original author)" ]
+                     "Lindsey Smith (maintainer)", "Erik Hetzner",
+                     "Aaron Swartz (original author)" ]
 
-import urllib2
+import urllib2, base64
 urllib2.install_opener(urllib2.build_opener())
 
 ### Vaguely Customizable Options ###
@@ -592,19 +593,20 @@ def add(*args):
     for url in urls: feeds.append(Feed(url, to, folder))
     unlock(feeds, feedfileObject)
 
-### HTML Parser for grabbing links ###
+### HTML Parser for grabbing links and images ###
 
 from HTMLParser import HTMLParser
-class AnchorParser(HTMLParser):
-    def __init__(self):
+class Parser(HTMLParser):
+    def __init__(self, tag = 'a', attr = 'href'):
         HTMLParser.__init__(self)
-        self.hrefs = []
-
+        self.tag = tag
+        self.attr = attr
+        self.attrs = []
     def handle_starttag(self, tag, attrs):
-        if tag == 'a':
+        if tag == self.tag:
             attrs = dict(attrs)
-            if 'href' in attrs:
-                self.hrefs.append(attrs['href'])
+            if self.attr in attrs:
+                self.attrs.append(attrs[self.attr])
 
 def run(num=None):
     feeds, feedfileObject = load()
@@ -789,9 +791,24 @@ def run(num=None):
                         else:
                             body = entrycontent.strip()
                         if THREAD_ON_LINKS:
-                            parser = AnchorParser()
+                            parser = Parser()
                             parser.feed(body)
-                            extraheaders['References'] += ''.join([' <%s>' % hashlib.sha1(h.encode('utf-8')).hexdigest() for h in parser.hrefs])
+                            extraheaders['References'] += ''.join([' <%s>' % hashlib.sha1(h.strip().encode('utf-8')).hexdigest() for h in parser.attrs])
+                        if INLINE_IMAGES_DATA_URI:
+                            parser = Parser(tag='img', attr='src')
+                            parser.feed(body)
+                            for src in parser.attrs:
+                                try:
+                                    img = feedparser._open_resource(src, None, None, feedparser.USER_AGENT, link, [], {})
+                                    data = img.read()
+                                    if hasattr(img, 'headers'):
+                                        headers = dict((k.lower(), v) for k, v in dict(img.headers).items())
+                                        ctype = headers.get('content-type', None)
+                                        if ctype and INLINE_IMAGES_DATA_URI:
+                                            body = body.replace(src,'data:%s;base64,%s' % (ctype, base64.b64encode(data)))
+                                except:
+                                    print >>warn, "Could not load image: %s" % src
+                                    pass
                         if body != '':  
                             content += '<div id="body">\n' + body + '</div>\n'
                         content += '\n<p class="footer">URL: <a href="'+link+'">'+link+'</a>'
