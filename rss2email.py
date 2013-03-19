@@ -802,7 +802,6 @@ def run(num=None):
                                     if hasattr(img, 'headers'):
                                         headers = dict((k.lower(), v) for k, v in dict(img.headers).items())
                                         ctype = headers.get('content-type', None)
-                                        print ctype, len(data)
                                         if ctype and INLINE_IMAGES_DATA_URI:
                                             body = body.replace(src,'data:%s;base64,%s' % (ctype, base64.b64encode(data)))
                                 except:

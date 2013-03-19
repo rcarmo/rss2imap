@@ -68,7 +68,7 @@ IMAP_SSL = 1
 IMAP_MUNGE_FROM = 1
 IMAP_OVERRIDE_TO = 'Me <me@localhost>'
 
-# Include inline images as a data: URI (not supported in MUAs like the mobile Gmail app)
+# Include inline images as a data: URI (not supported in MUAs like the mobile Gmail app, but works great on iOS and Mac)
 INCLUDE_IMAGES_DATA_URI = 0
 
 # Set this to add a bonus header to all emails (start with '\n').
