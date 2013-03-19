@@ -597,7 +597,7 @@ def add(*args):
 from HTMLParser import HTMLParser
 class AnchorParser(HTMLParser):
     def __init__(self):
-        HTMLParser.__init__()
+        HTMLParser.__init__(self)
         self.hrefs = []
 
     def handle_starttag(self, tag, attrs):
@@ -762,7 +762,7 @@ def run(num=None):
                         if taglist:
                             tagline = ",".join(taglist)
                     
-                    extraheaders = {'Date': datehdr, 'User-Agent': useragenthdr, 'X-RSS-Feed': f.url, 'Message-ID': '<%s@rss2email>' % hashlib.sha1(id.encode('utf-8')).hexdigest(), 'X-RSS-ID': id, 'X-RSS-URL': link, 'X-RSS-TAGS' : tagline, 'X-MUNGED-FROM': getMungedFrom(r)}
+                    extraheaders = {'Date': datehdr, 'User-Agent': useragenthdr, 'X-RSS-Feed': f.url, 'Message-ID': '<%s>' % hashlib.sha1(id.encode('utf-8')).hexdigest(), 'X-RSS-ID': id, 'X-RSS-URL': link, 'X-RSS-TAGS' : tagline, 'X-MUNGED-FROM': getMungedFrom(r), 'References': ''}
                     if BONUS_HEADER != '':
                         for hdr in BONUS_HEADER.strip().splitlines():
                             pos = hdr.strip().find(':')
@@ -774,6 +774,8 @@ def run(num=None):
                     entrycontent = getContent(entry, HTMLOK=HTML_MAIL)
                     contenttype = 'plain'
                     content = ''
+                    if THREAD_ON_TAGS and len(tagline):
+                        extraheaders['References'] += ''.join([' <%s>' % hashlib.sha1(t.strip().encode('utf-8')).hexdigest() for t in tagline.split(',')])
                     if USE_CSS_STYLING and HTML_MAIL:
                         contenttype = 'html'
                         content = "<html>\n" 
@@ -786,9 +788,10 @@ def run(num=None):
                             body = entrycontent[1].strip()
                         else:
                             body = entrycontent.strip()
-                        parser = AnchorParser()
-                        parser.feed(body)
-                        extraheaders['References'] = ' '.join(['<%s@rss2email>' % hashlib.sha1(h.encode('utf-8')).hexdigest() for h in parser.hrefs])
+                        if THREAD_ON_LINKS:
+                            parser = AnchorParser()
+                            parser.feed(body)
+                            extraheaders['References'] += ''.join([' <%s>' % hashlib.sha1(h.encode('utf-8')).hexdigest() for h in parser.hrefs])
                         if body != '':  
                             content += '<div id="body">\n' + body + '</div>\n'
                         content += '\n<p class="footer">URL: <a href="'+link+'">'+link+'</a>'

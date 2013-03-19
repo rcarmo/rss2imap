@@ -68,6 +68,11 @@ IMAP_SSL = 1
 IMAP_MUNGE_FROM = 1
 IMAP_OVERRIDE_TO = 'Me <me@localhost>'
 
+
+# Generate References: headers based on item tags and/or URLs in feed content
+THREAD_ON_TAGS = 1
+THREAD_ON_LINKS = 1
+
 # Set this to add a bonus header to all emails (start with '\n').
 BONUS_HEADER = ''
 # Example: BONUS_HEADER = '\nApproved: joe@bob.org'
