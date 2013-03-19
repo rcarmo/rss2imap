@@ -25,7 +25,7 @@ ___contributors__ = ["Dean Jackson", "Brian Lalor", "Joey Hess",
                      "Lindsey Smith (maintainer)", "Erik Hetzner",
                      "Aaron Swartz (original author)" ]
 
-import urllib2
+import urllib2, base64
 urllib2.install_opener(urllib2.build_opener())
 
 ### Vaguely Customizable Options ###
@@ -794,9 +794,20 @@ def run(num=None):
                         extraheaders['References'] = ' '.join(['<%s@rss2email>' % hashlib.sha1(h.encode('utf-8')).hexdigest() for h in parser.attrs])
                         parser = Parser(tag='img', attr='src')
                         parser.feed(body)
-                        for src in parser.attrs:
-                            print ">>> %s" % src
-
+                        if INLINE_IMAGES_DATA_URI:
+                            for src in parser.attrs:
+                                try:
+                                    img = feedparser._open_resource(src, None, None, feedparser.USER_AGENT, link, [], {})
+                                    data = img.read()
+                                    if hasattr(img, 'headers'):
+                                        headers = dict((k.lower(), v) for k, v in dict(img.headers).items())
+                                        ctype = headers.get('content-type', None)
+                                        print ctype, len(data)
+                                        if ctype and INLINE_IMAGES_DATA_URI:
+                                            body = body.replace(src,'data:%s;base64,%s' % (ctype, base64.b64encode(data)))
+                                except:
+                                    print >>warn, "Could not load image: %s" % src
+                                    pass
                         if body != '':  
                             content += '<div id="body">\n' + body + '</div>\n'
                         content += '\n<p class="footer">URL: <a href="'+link+'">'+link+'</a>'
