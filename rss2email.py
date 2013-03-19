@@ -1,4 +1,4 @@
- #!/usr/bin/python
+#!/usr/bin/python
 """rss2email: get RSS feeds emailed to you
 http://rss2email.infogami.com
 
@@ -22,7 +22,8 @@ ___contributors__ = ["Dean Jackson", "Brian Lalor", "Joey Hess",
                      "Matej Cepl", "Martin 'Joey' Schulze", 
                      "Marcel Ackermann (http://www.DreamFlasher.de)", 
                      "Rui Carmo (http://the.taoofmac.com)",
-                     "Lindsey Smith (maintainer)", "Erik Hetzner", "Aaron Swartz (original author)" ]
+                     "Lindsey Smith (maintainer)", "Erik Hetzner",
+                     "Aaron Swartz (original author)" ]
 
 import urllib2
 urllib2.install_opener(urllib2.build_opener())
@@ -592,19 +593,21 @@ def add(*args):
     for url in urls: feeds.append(Feed(url, to, folder))
     unlock(feeds, feedfileObject)
 
-### HTML Parser for grabbing links ###
+### HTML Parser for grabbing links and images ###
 
 from HTMLParser import HTMLParser
-class AnchorParser(HTMLParser):
-    def __init__(self):
-        HTMLParser.__init__()
-        self.hrefs = []
+class Parser(HTMLParser):
+    def __init__(self, tag = 'a', attr = 'href'):
+        HTMLParser.__init__(self)
+        self.tag = tag
+        self.attr = attr
+        self.attrs = []
 
     def handle_starttag(self, tag, attrs):
-        if tag == 'a':
+        if tag == self.tag:
             attrs = dict(attrs)
-            if 'href' in attrs:
-                self.hrefs.append(attrs['href'])
+            if self.attr in attrs:
+                self.attrs.append(attrs[self.attr])
 
 def run(num=None):
     feeds, feedfileObject = load()
@@ -786,9 +789,14 @@ def run(num=None):
                             body = entrycontent[1].strip()
                         else:
                             body = entrycontent.strip()
-                        parser = AnchorParser()
+                        parser = Parser(tag='a', attr='href')
                         parser.feed(body)
-                        extraheaders['References'] = ' '.join(['<%s@rss2email>' % hashlib.sha1(h.encode('utf-8')).hexdigest() for h in parser.hrefs])
+                        extraheaders['References'] = ' '.join(['<%s@rss2email>' % hashlib.sha1(h.encode('utf-8')).hexdigest() for h in parser.attrs])
+                        parser = Parser(tag='img', attr='src')
+                        parser.feed(body)
+                        for src in parser.attrs:
+                            print ">>> %s" % src
+
                         if body != '':  
                             content += '<div id="body">\n' + body + '</div>\n'
                         content += '\n<p class="footer">URL: <a href="'+link+'">'+link+'</a>'
