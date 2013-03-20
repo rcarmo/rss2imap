@@ -22,11 +22,13 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 # Main Features:
 
 * E-mail is injected directly via IMAP (so no delays or hassles with spam filters)
-* Feeds can be grouped into folders -- no inbox clutter!
+* Feeds can be grouped into IMAP folders -- no inbox clutter!
 * Generates E-mail headers for threading, so a post that references another post (or that includes the same link) will show up as a thread on decent MUAs. Also, posts from the same feed will be part of the same thread)
+* Can (optionally) include images inline (as `data:` URIs for now -- which only works properly on iOS/Mac -- soon as MIME attachments)
 
 # Next Steps:
 
+* Test nested folders (am only using single folders, not a nested hierarchy, so this might break)
 * Automatic message categorization using Bayesian filtering and NLTK
 * Automatic expunging of read items after a specified period (unless they're flagged/starred)
 * Better reference tracking to identify 'hot' items
