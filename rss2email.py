@@ -25,7 +25,7 @@ ___contributors__ = ["Dean Jackson", "Brian Lalor", "Joey Hess",
                      "Lindsey Smith (maintainer)", "Erik Hetzner",
                      "Aaron Swartz (original author)" ]
 
-import urllib2, base64
+import urllib2, base64, csv, StringIO
 urllib2.install_opener(urllib2.build_opener())
 
 ### Vaguely Customizable Options ###
@@ -594,6 +594,7 @@ def add(*args):
     for url in urls: feeds.append(Feed(url, to, folder))
     unlock(feeds, feedfileObject)
 
+
 ### HTML Parser for grabbing links and images ###
 
 from HTMLParser import HTMLParser
@@ -608,6 +609,20 @@ class Parser(HTMLParser):
             attrs = dict(attrs)
             if self.attr in attrs:
                 self.attrs.append(attrs[self.attr])
+
+
+### CSV dialect for parsing IMAP responses
+class mailboxlist(csv.excel):
+    delimiter = ' '
+
+
+csv.register_dialect('mailboxlist',mailboxlist)
+
+
+def uid(data):
+    m = re.match('\d+ \(UID (?P<uid>\d+)\)', data)
+    return m.group('uid')
+
 
 def run(num=None):
     feeds, feedfileObject = load()
@@ -883,6 +898,27 @@ def run(num=None):
     finally:        
         unlock(feeds, feedfileObject)
         if mailserver:
+            if IMAP_MOVE_READ_TO:
+                typ, data = mailserver.list(pattern='*')
+                # Parse folder listing as a CSV dialect (automatically removes quotes)
+                reader = csv.reader(StringIO.StringIO('\n'.join(data)),dialect='mailboxlist')
+                # Iterate over each folder
+                for row in reader:
+                    folder = row[-1:][0]
+                    if folder == IMAP_MOVE_READ_TO or '\Noselect' in row[0]:
+                        continue
+                    mailserver.select(folder)
+                    res, data = mailserver.search(None, '(SEEN UNFLAGGED)')
+                    if res == 'OK':
+                        items = data[0].split()
+                        for i in items:
+                            res, data = mailserver.fetch(i, "(UID)")
+                            if data[0]:
+                                u = uid(data[0])
+                                res, data = mailserver.uid('COPY', u, IMAP_MOVE_READ_TO)
+                                if res == 'OK':
+                                    res, data = mailserver.uid('STORE', u, '+FLAGS', '(\Deleted)')
+                                    mailserver.expunge()
             try:
                 mailserver.quit()
             except:
