@@ -25,99 +25,39 @@ ___contributors__ = ["Dean Jackson", "Brian Lalor", "Joey Hess",
                      "Lindsey Smith (maintainer)", "Erik Hetzner",
                      "Aaron Swartz (original author)" ]
 
-import urllib2, base64, csv, StringIO
+### Import Modules ###
+
+import os, sys, re, time
+import socket, urllib2, urlparse, imaplib, smtplib
 urllib2.install_opener(urllib2.build_opener())
-
-### Vaguely Customizable Options ###
-
-# The email address messages are from by default:
-DEFAULT_FROM = "bozo@dev.null.invalid"
-
-# 1: Send text/html messages when possible.
-# 0: Convert HTML to plain text.
-HTML_MAIL = 0
-
-# 1: Only use the DEFAULT_FROM address.
-# 0: Use the email address specified by the feed, when possible.
-FORCE_FROM = 0
-
-# 1: Receive one email per post.
-# 0: Receive an email every time a post changes.
-TRUST_GUID = 1
-
-# 1: Generate Date header based on item's date, when possible.
-# 0: Generate Date header based on time sent.
-DATE_HEADER = 0
-
-# A tuple consisting of some combination of
-# ('issued', 'created', 'modified', 'expired')
-# expressing ordered list of preference in dates 
-# to use for the Date header of the email.
-DATE_HEADER_ORDER = ('modified', 'issued', 'created')
-
-# 1: Apply Q-P conversion (required for some MUAs).
-# 0: Send message in 8-bits.
-# http://cr.yp.to/smtp/8bitmime.html
-#DEPRECATED 
-QP_REQUIRED = 0
-#DEPRECATED 
-    
-# 1: Name feeds as they're being processed.
-# 0: Keep quiet.
-VERBOSE = 0
-
-# 1: Use the publisher's email if you can't find the author's.
-# 0: Just use the DEFAULT_FROM email instead.
-USE_PUBLISHER_EMAIL = 0
-
-# 1: Use SMTP_SERVER to send mail.
-# 0: Call /usr/sbin/sendmail to send mail.
-SMTP_SEND = 0
-
-SMTP_SERVER = "smtp.yourisp.net:25"
-AUTHREQUIRED = 0 # if you need to use SMTP AUTH set to 1
-SMTP_USER = 'username'  # for SMTP AUTH, set SMTP username here
-SMTP_PASS = 'password'  # for SMTP AUTH, set SMTP password here
-
-# Connect to the SMTP server using SSL
-SMTP_SSL = 0
-
-# Set this to add a bonus header to all emails (start with '\n').
-BONUS_HEADER = ''
-# Example: BONUS_HEADER = '\nApproved: joe@bob.org'
-
-# Set this to override From addresses. Keys are feed URLs, values are new titles.
-OVERRIDE_FROM = {}
-
-# Set this to override From email addresses. Keys are feed URLs, values are new emails.
-OVERRIDE_EMAIL = {}
-
-# Set this to default From email addresses. Keys are feed URLs, values are new email addresses.
-DEFAULT_EMAIL = {}
-
-# Only use the email from address rather than friendly name plus email address
-NO_FRIENDLY_NAME = 0
-
-# Set this to override the timeout (in seconds) for feed server response
-FEED_TIMEOUT = 60
-
-# Optional CSS styling
-USE_CSS_STYLING = 0
-STYLE_SHEET='h1 {font: 18pt Georgia, "Times New Roman";} body {font: 12pt Arial;} a:link {font: 12pt Arial; font-weight: bold; color: #0000cc} blockquote {font-family: monospace; }  .header { background: #e0ecff; border-bottom: solid 4px #c3d9ff; padding: 5px; margin-top: 0px; color: red;} .header a { font-size: 20px; text-decoration: none; } .footer { background: #c3d9ff; border-top: solid 4px #c3d9ff; padding: 5px; margin-bottom: 0px; } #entry {border: solid 4px #c3d9ff; } #body { margin-left: 5px; margin-right: 5px; }'
-
-# If you have an HTTP Proxy set this in the format 'http://your.proxy.here:8080/'
-PROXY=""
-
-# To most correctly encode emails with international characters, we iterate through the list below and use the first character set that works
-# Eventually (and theoretically) ISO-8859-1 and UTF-8 are our catch-all failsafes
-CHARSET_LIST='US-ASCII', 'BIG5', 'ISO-2022-JP', 'ISO-8859-1', 'UTF-8'
+import string, csv, StringIO
+import hashlib, base64
+import traceback, types
+from types import *
+import threading, subprocess
+import cPickle as pickle
 
 from email.MIMEText import MIMEText
 from email.Header import Header
 from email.Utils import parseaddr, formataddr
-import imaplib, socket, hashlib, re, string, urlparse
              
-# Note: You can also override the send function.
+import feedparser
+feedparser.USER_AGENT = "rss2email/"+__version__+ " +https://github.com/rcarmo/rss2email"
+
+import html2text as h2t
+
+# Read options from config file if present.
+sys.path.insert(0,".")
+try:
+    from config import *
+except:
+    pass
+
+h2t.UNICODE_SNOB = UNICODE_SNOB
+h2t.LINKS_EACH_PARAGRAPH = LINKS_EACH_PARAGRAPH
+h2t.BODY_WIDTH = BODY_WIDTH
+html2text = h2t.html2text
+
 
 def send(sender, recipient, subject, body, contenttype, datetime, extraheaders=None, mailserver=None, folder=None):
     """Send an email.
@@ -217,7 +157,6 @@ def send(sender, recipient, subject, body, contenttype, datetime, extraheaders=N
 
     elif SMTP_SEND:
         if not mailserver: 
-            import smtplib
             
             try:
                 if SMTP_SSL:
@@ -278,42 +217,12 @@ SMTP_PASS = 'password'  # for SMTP AUTH, set SMTP password here
             sys.exit(1)
         return None
 
-## html2text options ##
-
-# Use Unicode characters instead of their ascii psuedo-replacements
-UNICODE_SNOB = 0
-
-# Put the links after each paragraph instead of at the end.
-LINKS_EACH_PARAGRAPH = 0
-
-# Wrap long lines at position. 0 for no wrapping. (Requires Python 2.3.)
-BODY_WIDTH = 0
-
-### Load the Options ###
-
-# Read options from config file if present.
-import sys
-sys.path.insert(0,".")
-try:
-    from config import *
-except:
-    pass
 
 warn = sys.stderr
     
 if QP_REQUIRED:
     print >>warn, "QP_REQUIRED has been deprecated in rss2email."
 
-### Import Modules ###
-
-import cPickle as pickle, time, os, traceback, sys, types, subprocess
-hash = ()
-try:
-    import hashlib
-    hash = hashlib.md5
-except ImportError:
-    import md5
-    hash = md5.new
 
 unix = 0
 try:
@@ -324,21 +233,9 @@ try:
 except:
     pass
         
-import socket; socket_errors = []
+socket_errors = []
 for e in ['error', 'gaierror']:
     if hasattr(socket, e): socket_errors.append(getattr(socket, e))
-
-import feedparser
-feedparser.USER_AGENT = "rss2email/"+__version__+ " +https://github.com/rcarmo/rss2email"
-
-import html2text as h2t
-
-h2t.UNICODE_SNOB = UNICODE_SNOB
-h2t.LINKS_EACH_PARAGRAPH = LINKS_EACH_PARAGRAPH
-h2t.BODY_WIDTH = BODY_WIDTH
-html2text = h2t.html2text
-
-from types import *
 
 ### Utility Functions ###
 
@@ -436,9 +333,9 @@ def getID(entry):
             return entry.id
 
     content = getContent(entry)
-    if content and content != "\n": return hash(unu(content)).hexdigest()
+    if content and content != "\n": return hashlib.sha1(unu(content)).hexdigest()
     if 'link' in entry: return entry.link
-    if 'title' in entry: return hash(unu(entry.title)).hexdigest()
+    if 'title' in entry: return hashlib.sha1(unu(entry.title)).hexdigest()
 
 def getName(r, entry):
     """Get the best name."""
