@@ -75,8 +75,8 @@ THREAD_ON_LINKS = 1
 # Include inline images as a data: URI (not supported in MUAs like the mobile Gmail app, but works great on iOS and Mac)
 INLINE_IMAGES_DATA_URI = 0
 
-# Move read messages to a specific folder after 20 minutes
-IMAP_MOVE_READ_TO = '[Gmail].Trash'
+# Move read messages to a specific folder
+IMAP_MOVE_READ_TO = False
 
 # Set this to add a bonus header to all emails (start with '\n').
 BONUS_HEADER = ''
