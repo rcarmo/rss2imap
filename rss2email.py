@@ -891,6 +891,7 @@ def run(num=None):
 def list():
     feeds, feedfileObject = load(lock=0)
     default_to = ""
+    default_folder = "INBOX"
     
     if feeds and isstr(feeds[0]):
         default_to = feeds[0]; ifeeds = feeds[1:]; i=1
@@ -898,7 +899,7 @@ def list():
     else: ifeeds = feeds; i = 0
     for f in ifeeds:
         active = ('[ ]', '[*]')[f.active]
-        print `i`+':',active, f.url, '('+(f.to or ('default: '+default_to))+') ' + f.folder
+        print `i`+':',active, f.url, '(to: '+(f.to or (default_to+' (default)'))+', ' + 'folder: '+(f.folder or (default_folder+' (default))'))
         if not (f.to or default_to):
             print "   W: Please define a default address with 'r2e email emailaddress'"
         i+= 1
