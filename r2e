@@ -1,2 +1,22 @@
 #!/bin/sh
-python rss2email.py feeds.dat $*
+
+set -e
+
+FEEDS=feeds.dat
+
+# Look for feeds.dat in the current directory and, if found, use that
+# as configuration data. Otherwise, use ~/.rss2email as a directory to
+# store the data.
+
+if [ -f "${FEEDS}" ]; then
+    CFDIR=.
+else
+    CFDIR="${HOME}/.rss2email"
+fi
+
+if [ ! -d "${CFDIR}" ]; then
+    mkdir "${CFDIR}"
+fi
+
+# Add $CFDIR to $PYTHONPATH so that config.py can be found.
+PYTHONPATH="${CFDIR}:${PYTHONPATH}" python rss2email.py "${CFDIR}/${FEEDS}" $*
