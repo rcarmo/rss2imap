@@ -795,6 +795,17 @@ def run(num=None):
     finally:        
         unlock(feeds, feedfileObject)
         if mailserver:
+            if IMAP_MARK_AS_READ:
+                for folder in IMAP_MARK_AS_READ:
+                    mailserver.select(folder)
+                    res, data = mailserver.search(None, '(UNSEEN UNFLAGGED)')
+                    if res == 'OK':
+                        items = data[0].split()
+                        for i in items:
+                            res, data = mailserver.fetch(i, "(UID)")
+                            if data[0]:
+                                u = uid(data[0])
+                                res, data = mailserver.uid('STORE', u, '+FLAGS', '(\Seen)')
             if IMAP_MOVE_READ_TO:
                 typ, data = mailserver.list(pattern='*')
                 # Parse folder listing as a CSV dialect (automatically removes quotes)

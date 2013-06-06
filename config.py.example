@@ -78,6 +78,9 @@ INLINE_IMAGES_DATA_URI = 0
 # Move read messages to a specific folder
 IMAP_MOVE_READ_TO = False
 
+# Mark all messages as read in the following folders
+IMAP_MARK_AS_READ = None # ['Trash']
+
 # Set this to add a bonus header to all emails (start with '\n').
 BONUS_HEADER = ''
 # Example: BONUS_HEADER = '\nApproved: joe@bob.org'
