@@ -941,7 +941,7 @@ if __name__ == '__main__':
         
         if action == "run": 
             if args and args[0] == "--no-send":
-                def send(sender, recipient, subject, body, contenttype, extraheaders=None, mailserver=None):
+                def send(sender, recipient, subject, body, contenttype, datetime, extraheaders=None, mailserver=None, folder=None):
                     if VERBOSE: print 'Not sending:', unu(subject)
 
             if args and args[-1].isdigit(): run(int(args[-1]))
