@@ -416,11 +416,12 @@ def getEmail(r, entry):
 ### Simple Database of Feeds ###
 
 class Feed:
-    def __init__(self, url, to, folder=None):
+    def __init__(self, url, to, folder=None, scraping=False):
         self.url, self.etag, self.modified, self.seen = url, None, None, {}
         self.active = True
         self.to = to
         self.folder = folder
+        self.scraping = scraping
 
 def load(lock=1):
     if not os.path.exists(feedfile):
@@ -475,20 +476,26 @@ def parse(url, etag, modified):
 ### Program Functions ###
 
 def add(*args):
+    last = 1
+    if args[-1:].lower() in ['true', 'false', 'scrape']:
+        skip_last = 0
+        scraping = args[-1:] in ['true', 'scrape']
+
     if len(args) == 2 and contains(args[1], '@') and not contains(args[1], '://'):
         urls, to = [args[0]], args[1]
         folder = None
+        scraping = False
     elif len(args) >= 2:
-        urls, to, folder = [args[0]], None, ' '.join(args[1:])
+        urls, to, folder, scraping = [args[0]], None, ' '.join(args[1:-last]), False
     else:
-        urls, to, folder = args, None, None
+        urls, to, folder, scraping = args, None, None, False
     
     feeds, feedfileObject = load()
     if (feeds and not isstr(feeds[0]) and to is None) or (not len(feeds) and to is None):
         print "No email address has been defined. Please run 'r2e email emailaddress' or"
         print "'r2e add url emailaddress'."
         sys.exit(1)
-    for url in urls: feeds.append(Feed(url, to, folder))
+    for url in urls: feeds.append(Feed(url, to, folder, scraping))
     unlock(feeds, feedfileObject)
 
 
