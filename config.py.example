@@ -118,3 +118,8 @@ LINKS_EACH_PARAGRAPH = 0
 
 # Wrap long lines at position. 0 for no wrapping. (Requires Python 2.3.)
 BODY_WIDTH = 0
+
+# Change the default imap folder
+DEFAULT_IMAP_FOLDER = "INBOX"
+
+
