@@ -46,6 +46,8 @@ feedparser.USER_AGENT = "rss2email/"+__version__+ " +https://github.com/rcarmo/r
 
 import html2text as h2t
 
+DEFAULT_IMAP_FOLDER = "INBOX"
+
 # Read options from config file if present.
 sys.path.insert(0,".")
 try:
@@ -146,7 +148,7 @@ def send(sender, recipient, subject, body, contenttype, datetime, extraheaders=N
                     print >>warn, "Reason:", e.reason
                 sys.exit(1)
         if not folder:
-            folder = 'INBOX'
+            folder = DEFAULT_IMAP_FOLDER
         #mailserver.debug = 4
         if mailserver.select(folder)[0] == 'NO':
             print >>warn, ("%s does not exist, creating" % folder)
@@ -835,7 +837,7 @@ def run(num=None):
 def list():
     feeds, feedfileObject = load(lock=0)
     default_to = ""
-    default_folder = "INBOX"
+    default_folder = DEFAULT_IMAP_FOLDER
     
     if feeds and isstr(feeds[0]):
         default_to = feeds[0]; ifeeds = feeds[1:]; i=1
