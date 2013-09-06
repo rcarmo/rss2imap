@@ -703,7 +703,7 @@ def run(num=None):
                         if ishtml(entrycontent):
                             body = entrycontent[1].strip()
                             if SUMMARIZE:
-                                content += summarize(html2text(body, ignore_links=True), SUMMARIZE) + "<hr>"
+                                content += summarize(html2text(body, plaintext=True), SUMMARIZE) + "<hr>"
                         else:
                             body = entrycontent.strip()
                             if SUMMARIZE:
