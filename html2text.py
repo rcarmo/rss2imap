@@ -807,8 +807,9 @@ def wrapwrite(text):
     except AttributeError:
         sys.stdout.write(text)
 
-def html2text(html, baseurl=''):
+def html2text(html, baseurl='', ignore_links=False):
     h = HTML2Text(baseurl=baseurl)
+    h.ignore_links = ignore_links
     return h.handle(html)
 
 def unescape(s, unicode_snob=False):
