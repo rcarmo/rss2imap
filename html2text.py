@@ -52,7 +52,7 @@ BODY_WIDTH = 78
 SKIP_INTERNAL_LINKS = True
 
 # Use inline, rather than reference, formatting for images and links
-INLINE_LINKS = True
+INLINE_LINKS = False
 
 # Number of pixels Google indents nested lists
 GOOGLE_LIST_INDENT = 36
