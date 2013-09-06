@@ -21,6 +21,7 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 
 # Main Features:
 
+* Optional (naive) summarization of news items
 * E-mail is injected directly via IMAP (so no delays or hassles with spam filters)
 * Feeds can be grouped into IMAP folders -- no inbox clutter!
 * Generates E-mail headers for threading, so a post that references another post (or that includes the same link) will show up as a thread on decent MUAs. Also, posts from the same feed will be part of the same thread)
@@ -29,10 +30,10 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 
 # Next Steps:
 
+* Refactor this as a multi-threaded app with a SQLite feed store (in progress as part of [bottle-fever](https://github.com/rcarmo/bottle-fever)
 * Test nested folders (am only using single folders, not a nested hierarchy, so this might break)
 * Automatic message categorization using Bayesian filtering and NLTK
 * Better reference tracking to identify 'hot' items
 * Figure out a nice way to do favicons (X-Face is obsolete, and so is X-Image-URL)
-* Refactor this as a multi-threaded app with a SQLite feed store
 
 Be aware that this works and is easy to hack, but uses old Python idioms and could do with some refactoring (PEP-8 zealots are sure to cringe as they read through the code).
