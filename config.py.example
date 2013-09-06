@@ -122,4 +122,5 @@ BODY_WIDTH = 0
 # Change the default imap folder
 DEFAULT_IMAP_FOLDER = "INBOX"
 
-
+# Whether to summarize the body or not. Set it to the number of sentences you require.
+SUMMARIZE = 0
