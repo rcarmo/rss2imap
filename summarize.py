@@ -22,7 +22,7 @@ def frequency(text):
 
 
 def score(sentence, frequencies):
-    return sum((frequencies[token] for token in tokenize(sentence)))
+    return sum((frequencies[token] for token in sentence.split()))
 
 
 def reorder(sentences, text):
