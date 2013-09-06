@@ -101,7 +101,7 @@ FEED_TIMEOUT = 60
 
 # Optional CSS styling
 USE_CSS_STYLING = 1
-STYLE_SHEET='img {max-width: 100% !important; height: auto;} body, #body {font-size: 12pt; word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space; font-family: Georgia, Times New Roman, Times, serif;} a:link {color: #0000cc} h1.header a {font-weight: normal; text-decoration: none; color: black;} .summary {font-size: 80%;}'
+STYLE_SHEET='img {max-width: 100% !important; height: auto;} body, #body {font-size: 12pt; word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space; font-family: Georgia, Times New Roman, Times, serif;} a:link {color: #0000cc} h1.header a {font-weight: normal; text-decoration: none; color: black;} .summary {font-size: 80%; font-style: italic;}'
 
 # If you have an HTTP Proxy set this in the format 'http://your.proxy.here:8080/'
 PROXY=""
