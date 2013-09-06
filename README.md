@@ -21,7 +21,7 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 
 # Main Features:
 
-* Optional (naive) summarization of news items
+* Optional (naive) summarization of news items at the top of each item (see `SUMMARIZE` setting)
 * E-mail is injected directly via IMAP (so no delays or hassles with spam filters)
 * Feeds can be grouped into IMAP folders -- no inbox clutter!
 * Generates E-mail headers for threading, so a post that references another post (or that includes the same link) will show up as a thread on decent MUAs. Also, posts from the same feed will be part of the same thread)
