@@ -703,11 +703,11 @@ def run(num=None):
                         if ishtml(entrycontent):
                             body = entrycontent[1].strip()
                             if SUMMARIZE:
-                                content += summarize(html2text(body, plaintext=True), SUMMARIZE) + "<hr>"
+                                content += '<div class="summary">%s</div>' % (summarize(html2text(body, plaintext=True), SUMMARIZE) + "<hr>")
                         else:
                             body = entrycontent.strip()
                             if SUMMARIZE:
-                                content += summarize(body, SUMMARIZE) + "<hr>"
+                                content += '<div class="summary">%s</div>' % (summarize(body, SUMMARIZE) + "<hr>")
                         content += '<h1 class="header"'
                         content += '><a href="'+link+'">'+subjecthdr+'</a></h1>\n'
                         if THREAD_ON_LINKS:

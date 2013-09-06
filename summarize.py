@@ -33,4 +33,4 @@ def reorder(sentences, text):
 def summarize(text, limit=3):
     items = [s for s in sentences(text)]
     items.sort(key=lambda s: score(s, frequency(text)), reverse=1)
-    return '\n'.join(["<p>%s</p>" % s for s in reorder(items[:limit], text)])
+    return '\n'.join(["<p><i>%s</i></p>" % s for s in reorder(items[:limit], text)])
