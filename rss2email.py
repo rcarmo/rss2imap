@@ -700,6 +700,8 @@ def run(num=None):
                         content += '<head><meta http-equiv="Content-Type" content="text/html"><style>' + STYLE_SHEET + '</style></head>\n'
                         content += '<body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">\n'
                         content += '<div id="entry">\n'
+                        content += '<h1 class="header"'
+                        content += '><a href="'+link+'">'+subjecthdr+'</a></h1>\n'
                         if ishtml(entrycontent):
                             body = entrycontent[1].strip()
                             if SUMMARIZE:
@@ -708,8 +710,6 @@ def run(num=None):
                             body = entrycontent.strip()
                             if SUMMARIZE:
                                 content += '<div class="summary">%s</div>' % (summarize(body, SUMMARIZE) + "<hr>")
-                        content += '<h1 class="header"'
-                        content += '><a href="'+link+'">'+subjecthdr+'</a></h1>\n'
                         if THREAD_ON_LINKS:
                             parser = Parser()
                             parser.feed(body)
