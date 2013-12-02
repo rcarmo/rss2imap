@@ -30,7 +30,7 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 
 # Next Steps:
 
-* Refactor this as a multi-threaded app with a SQLite feed store (in progress as part of [bottle-fever](https://github.com/rcarmo/bottle-fever)
+* Refactor this as a multi-threaded app with a SQLite feed store -- in progress as part of [bottle-fever](https://github.com/rcarmo/bottle-fever)
 * Test nested folders (am only using single folders, not a nested hierarchy, so this might break)
 * Automatic message categorization using Bayesian filtering and NLTK
 * Better reference tracking to identify 'hot' items
