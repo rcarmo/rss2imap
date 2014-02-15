@@ -36,4 +36,6 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 * Better reference tracking to identify 'hot' items
 * Figure out a nice way to do favicons (X-Face is obsolete, and so is X-Image-URL)
 
-Be aware that this works and is easy to hack, but uses old Python idioms and could do with some refactoring (PEP-8 zealots are sure to cringe as they read through the code).
+# Here Be Dragons
+
+Be aware that this works and is easy to hack, but uses old Python idioms and could do with some refactoring (PEP-8 zealots are sure to cringe as they read through the code -- I know I find it hideous, but it was a quick hack and has been working reliably for me for nearly a year now).
