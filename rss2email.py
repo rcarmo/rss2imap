@@ -42,7 +42,7 @@ from email.Header import Header
 from email.Utils import parseaddr, formataddr
              
 import feedparser
-feedparser.USER_AGENT = "rss2email/"+__version__+ " +https://github.com/rcarmo/rss2email"
+feedparser.USER_AGENT = "rss2email/"+__version__+ " +https://github.com/rcarmo/rss2imap"
 
 import html2text as h2t
 from summarize import summarize
