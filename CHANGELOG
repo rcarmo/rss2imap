@@ -1,3 +1,6 @@
+v2.72-rcarmo (2015-03)
+    * Flush read messages after one day instead of on every run
+
 v2.71-rcarmo (2013-03)
     * Add IMAP support
     * Changed default CSS and config options
