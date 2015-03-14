@@ -15,19 +15,20 @@ Usage:
   opmlexport
   opmlimport filename
 """
-__version__ = "2.71-rcarmo"
+__version__ = "2.72-rcarmo"
 __author__ = "Lindsey Smith (lindsey@allthingsrss.com)"
 __copyright__ = "(C) 2004 Aaron Swartz. GNU GPL 2 or 3."
 ___contributors__ = ["Dean Jackson", "Brian Lalor", "Joey Hess", 
                      "Matej Cepl", "Martin 'Joey' Schulze", 
                      "Marcel Ackermann (http://www.DreamFlasher.de)", 
-                     "Rui Carmo (http://the.taoofmac.com)",
+                     "Rui Carmo (http://taoofmac.com)",
                      "Lindsey Smith (maintainer)", "Erik Hetzner",
                      "Aaron Swartz (original author)" ]
 
 ### Import Modules ###
 
 import os, sys, re, time
+from datetime import datetime, timedelta
 import socket, urllib2, urlparse, imaplib, smtplib
 urllib2.install_opener(urllib2.build_opener())
 import string, csv, StringIO
@@ -823,7 +824,8 @@ def run(num=None):
                     if folder == IMAP_MOVE_READ_TO or '\Noselect' in row[0]:
                         continue
                     mailserver.select(folder)
-                    res, data = mailserver.search(None, '(SEEN UNFLAGGED)')
+                    yesterday = (datetime.now() - timedelta(days=1)).strftime("%d-%b-%Y")
+                    res, data = mailserver.search(None, '(SEEN BEFORE %s UNFLAGGED)' % yesterday)
                     if res == 'OK':
                         items = data[0].split()
                         for i in items:
