@@ -13,7 +13,7 @@ Well, with the shipping CSS in `config.py`, it looks like this:
 
 Well, it works fine with the Gmail app on both Android and iOS, as well as the native IMAP clients:
 
-<img src="https://raw.github.com/rcarmo/rss2email/screenshots/gmail.ios.1.jpg" width="25%"> <img src="https://raw.github.com/rcarmo/rss2email/screenshots/mail.ios.1.jpg" width="25%"> <img src="https://raw.github.com/rcarmo/rss2email/screenshots/gmail.android.1.jpg" width="25%"> <img src="https://raw.github.com/rcarmo/rss2email/screenshots/mail.android.1.jpg" width="25%">
+<img src="https://raw.github.com/rcarmo/rss2email/screenshots/gmail.ios.1.jpg" width="24%"><img src="https://raw.github.com/rcarmo/rss2email/screenshots/mail.ios.1.jpg" width="24%"><img src="https://raw.github.com/rcarmo/rss2email/screenshots/gmail.android.1.jpg" width="24%"><img src="https://raw.github.com/rcarmo/rss2email/screenshots/mail.android.1.jpg" width="24%">
 
 As long as you sync, all the text will be available off-line (images are cached at the whim of the MUA).
 
@@ -21,7 +21,8 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 
 # Main Features:
 
-* *NEW:* Optional (naive) summarization of news items at the top of each item (see `SUMMARIZE` setting)
+* *NEW:* Automatically file away messages read after one day instead of on every run
+* Optional (naive) summarization of news items at the top of each item (see `SUMMARIZE` setting)
 * E-mail is injected directly via IMAP (so no delays or hassles with spam filters)
 * Feeds can be grouped into IMAP folders -- no inbox clutter!
 * Generates E-mail headers for threading, so a post that references another post (or that includes the same link) will show up as a thread on decent MUAs. Also, posts from the same feed will be part of the same thread)
@@ -32,7 +33,7 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 
 Given that I've only had to tweak _one thing_ after two years of continued use, I'd say this is more than stable. I've gone off and built a multi-threaded app with a SQLite feed store called [bottle-fever](https://github.com/rcarmo/bottle-fever), but there's only so much free time, and even though this code is crammed with hideous legacy idioms, it works as is...
 
-# Exercises For The Reader:
+## Exercises For The Reader
 
 * Test nested folders (am only using single folders, not a nested hierarchy, so this might break)
 * Automatic message categorization using Bayesian filtering and NLTK
