@@ -28,9 +28,12 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 * Can (optionally) include images inline (as `data:` URIs for now -- which only works properly on iOS/Mac -- soon as MIME attachments)
 * Can (optionally) remove read (but not flagged) items automatically
 
-# Next Steps:
+# Project Status:
 
-* Refactor this as a multi-threaded app with a SQLite feed store -- in progress as part of [bottle-fever](https://github.com/rcarmo/bottle-fever)
+Given that I've only had to tweak _one thing_ after two years of continued use, I'd say this is more than stable. I've gone off and built a multi-threaded app with a SQLite feed store called [bottle-fever](https://github.com/rcarmo/bottle-fever), but there's only so much free time, and even though this code is crammed with hideous legacy idioms, it works as is...
+
+# Exercises For The Reader:
+
 * Test nested folders (am only using single folders, not a nested hierarchy, so this might break)
 * Automatic message categorization using Bayesian filtering and NLTK
 * Better reference tracking to identify 'hot' items
@@ -38,4 +41,4 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 
 # Here Be Dragons
 
-Be aware that this works and is easy to hack, but uses old Python idioms and could do with some refactoring (PEP-8 zealots are sure to cringe as they read through the code -- I know I find it hideous, but it was a quick hack and has been working reliably for me for nearly a year now).
+Be aware that this works and is easy to hack, but uses old Python idioms and could do with some refactoring (PEP-8 zealots are sure to cringe as they read through the code -- I know I find it hideous, but it was a quick hack and has been working reliably for me for over two years now).
