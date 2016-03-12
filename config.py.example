@@ -124,3 +124,6 @@ DEFAULT_IMAP_FOLDER = "INBOX"
 
 # Whether to summarize the body or not. Set it to the number of sentences you require.
 SUMMARIZE = 0
+
+# When set to "1", during OPML import, the title tag of parent "outline" element is used as folder path
+USE_OPML_TITLE_AS_FOLDER = O
