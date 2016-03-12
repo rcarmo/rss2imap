@@ -892,9 +892,14 @@ def opmlimport(importfile):
     
     for f in newfeeds:
         if f.hasAttribute('xmlUrl'):
+            category = f.parentNode
+            folder = None
+            if USE_OPML_TITLE_AS_FOLDER:
+                if category.hasAttribute("title")!=None:
+                    folder = category.getAttribute("title")
             feedurl = f.getAttribute('xmlUrl')
             print 'Adding %s' % xml.sax.saxutils.unescape(feedurl)
-            feeds.append(Feed(feedurl, None))
+            feeds.append(Feed(feedurl, None, folder))
             
     unlock(feeds, feedfileObject)
 
