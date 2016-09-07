@@ -29,9 +29,19 @@ The Gmail app ignores CSS and may have weird behaviors with long bits of text, t
 * Can (optionally) include images inline (as `data:` URIs for now -- which only works properly on iOS/Mac -- soon as MIME attachments)
 * Can (optionally) remove read (but not flagged) items automatically
 
-# Project Status:
+# Project Status
 
-Given that I've only had to tweak _one thing_ after two years of continued use, I'd say this is more than stable. I've gone off and built a multi-threaded app with a SQLite feed store called [bottle-fever](https://github.com/rcarmo/bottle-fever), but there's only so much free time, and even though this code is crammed with hideous legacy idioms, it works as is...
+Given that I've only had to tweak _one thing_ after two years of continued use, I'd say this is more than stable. I've gone off and built a multi-threaded app with a SQLite feed store called [bottle-fever](https://github.com/rcarmo/bottle-fever), but there's only so much free time, and even though this code is crammed with hideous legacy idioms, it works as is.
+
+Come 2016, I switched to Feedly because the user experience on the iPad using [Reeder](http://reederapp.com) was a little better.
+
+## Similar Projects
+
+Other projects I've come across that traveled this path in other languages:
+
+* [greghendershott/feeds2gmail](https://github.com/greghendershott/feeds2gmail), using [Racket](https://www.racket-lang.org)
+* [Gonzih/feeds2imap.clj](https://github.com/Gonzih/feeds2imap.clj), using [Clojure](https://clojure.org)
+* [rcarmo/go-rss2imap](https://github.com/rcarmo/go-rss2imap) my attempt at tweaking a [Go](http://golang.org) version
 
 ## Exercises For The Reader
 
