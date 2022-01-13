@@ -42,6 +42,7 @@ Other projects I've come across that traveled this path in other languages:
 * [greghendershott/feeds2gmail](https://github.com/greghendershott/feeds2gmail), using [Racket](https://www.racket-lang.org)
 * [Gonzih/feeds2imap.clj](https://github.com/Gonzih/feeds2imap.clj), using [Clojure](https://clojure.org)
 * [rcarmo/go-rss2imap](https://github.com/rcarmo/go-rss2imap) my attempt at tweaking a [Go](http://golang.org) version
+* [Riduidel/rrss2imap](https://github.com/Riduidel/rrss2imap), using [Rust](https://www.rust-lang.org/)
 
 ## Exercises For The Reader
 
